@@ -11,10 +11,10 @@ foreach(scratch_src ${scratches})
     string(REGEX REPLACE "\\.[^.]*$" "" scratch_name ${scratch_name})
 
     string(FIND "${DONT_BUILD}" "${scratch_name}" res)
-
     if(res LESS 0)
-        add_executable(${scratch_name} "${scratch_src}")
+        add_executable(${scratch_name} "hello_world.cc")
     target_link_libraries(${scratch_name} "${local-ns3-libs}" ${ns3-contrib-libs})
     endif()
 endforeach()
 
+#add_executable("test2", "test2.cc")
