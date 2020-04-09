@@ -67,18 +67,26 @@ NodeContainer createNodes() {
  */
 NetDeviceContainer createPointToPointLinks(NodeContainer nodes) {
 
-    //Helper to Build a set of PointToPointNetDevice objects.
-    //A NetDevice is an abstraction for a network card and a "Channel" is an abstraction for a network cable
+    // Helper to Build a set of PointToPointNetDevice objects.
+    // A NetDevice is an abstraction for a network card and a "Channel" is an abstraction for a network cable
     PointToPointHelper pointToPoint;
 
-    //Configure the point to point helper to use 5Mbs data rate whenever creating NetDevices
+    // Configure the point to point helper to use 5Mbs data rate whenever creating NetDevices
     pointToPoint.SetDeviceAttribute("DataRate", StringValue("5Mbps"));
 
-    //Configure the point to point helper to use 2ms propagation delay whenever creating channels
+    // Configure the point to point helper to use 2ms propagation delay whenever creating channels
     pointToPoint.SetChannelAttribute("Delay", StringValue("2ms"));
 
     NetDeviceContainer devices;
     devices = pointToPoint.Install(nodes);
+
+    // Record pcap files of the communication over this link
+    pointToPoint.EnablePcap("hello_world", nodes, true);
+
+    // Capture tracing output in ASCII files as well
+    AsciiTraceHelper ascii;
+    pointToPoint.EnableAsciiAll (ascii.CreateFileStream ("hello_world.tr"));
+
     return devices;
 }
 
